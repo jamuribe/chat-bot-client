@@ -1,8 +1,7 @@
 <template>
   <section class="container">
-    YodaBot
-    <div class="chat-box-list-container">
-      <ul class="chat-bot-list">
+    <div>
+      <ul>
         <li class="message" v-for="(message, index) in messages" :key="index">
           <Message :message="message" :author="message.author" />
         </li>
@@ -25,12 +24,19 @@ export default {
 
 <style scoped>
 .container {
-  max-width: 500px;
+  max-width: 800px;
   margin: 30px auto;
   overflow: auto;
-  min-height: 300px;
-  border: 1px solid steelblue;
+  max-height: 500px;
   padding: 30px;
   border-radius: 5px;
+}
+.message {
+  text-align: left;
+}
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 </style>

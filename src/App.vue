@@ -17,6 +17,7 @@ export default {
   data: () => ({
     message: "",
     messages: [],
+    messageCount: 0,
   }),
   created() {
     const storedMessages = this.openStorage();
@@ -53,7 +54,17 @@ export default {
       if (message.match(/\b(force)\b/gi)) return true;
       return false;
     },
+    checkCount(message) {
+      let errorMessages = [
+        "I'm sorry, I couldn't find any information relating to your question. Please search for another word or phrase.",
+        "I've had a look and there's nothing I can find which fits your question. Please search again using a different word or phrase.",
+        "Sorry, we couldn't find any answers to your question.",
+      ];
 
+      if (errorMessages.includes(`${message}`)) {
+        this.messageCount++;
+      }
+    },
     async sendMessage() {
       if (!this.message.length) return;
       this.pushToMessage(this.message, "Me");
@@ -67,7 +78,11 @@ export default {
 
     async receiveMessage(message) {
       await apiService.sendMessage(message).then((res) => {
-        console.log(res);
+        this.checkCount(res.data["message"]);
+        if (this.messageCount > 1) {
+          this.messageCount = 0;
+          return this.getCharacters();
+        }
         let text = res.data["message"];
         this.pushToMessage(text, "Master Yoda");
       });
@@ -75,36 +90,19 @@ export default {
 
     async getCharacters() {
       await apiService.getCharacters().then((res) => {
-        console.log(res);
-        let characters = res.slice(1, 10).map((char) => {
+        let characters = res.slice(0, 10).map((char) => {
           return char.name;
         });
         this.pushToMessage(characters, "Master Yoda");
-        // this.messages.push({
-        //   text: [
-        //     "Results I have not, list of character you must have: ",
-        //     ...characters,
-        //   ],
-        //   author: "Master Yoda",
-        // });
       });
     },
 
     async getmovieList() {
       await apiService.getMovies().then((res) => {
-        console.log(res);
-
         let movies = res.map((movie) => {
           return movie.title;
         });
         this.pushToMessage(movies, "Master Yoda");
-        // this.messages.push({
-        //   text: [
-        //     "Strong is the force, a movie list here you have: ",
-        //     ...movies,
-        //   ],
-        //   author: "Master Yoda",
-        // });
       });
     },
   },

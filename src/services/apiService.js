@@ -1,17 +1,8 @@
 import axios from 'axios';
 
-const getQuote = async () => {
-  try {
-    const res = await axios.get('https://cw-quotes.herokuapp.com/api/quotes/random');
-    return res;
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 const startConversation = async () => {
   try {
-    const res = await axios.get('http://localhost:3000/start');
+    const res = await axios.get(`${process.env.VUE_APP_API}start`);
     refreshToken()
     return res;
   } catch (err) {
@@ -21,8 +12,7 @@ const startConversation = async () => {
 const refreshToken = async () => {
   try {
     const intervalID = setInterval(async () => {
-      const res = await axios.get('http://localhost:3000/refresh');
-      console.log(res)
+      const res = await axios.get(`${process.env.VUE_APP_API}refresh`);
       return res;
 
     }, 120000)
@@ -35,8 +25,7 @@ const sendMessage = async (message) => {
   let body = {};
   try {
     body['message'] = message;
-    const res = await axios.post('http://localhost:3000/message', body);
-    console.log(res)
+    const res = await axios.post(`${process.env.VUE_APP_API}message`, body);
     return res;
   } catch (err) {
     console.error('Error: 0.3 ', err);
@@ -44,11 +33,11 @@ const sendMessage = async (message) => {
     return { data };
   }
 }
-sendMessage('hello')
 
 const getCharacters = async () => {
   try {
-    const res = await axios.get('http://localhost:3000/characters');
+    const res = await axios.get(`${process.env.VUE_APP_API}characters`);
+    res.data[0].unshift({ name: 'When nine hundred years old you reach, look as good you will not.' });
     return res.data[0];
   } catch (err) {
     console.error('Error: 0.4 ', err);
@@ -59,17 +48,17 @@ const getCharacters = async () => {
 // function to get movie list GET
 const getMovies = async () => {
   try {
-    const res = await axios.get('http://localhost:3000/movies');
+    const res = await axios.get(`${process.env.VUE_APP_API}movies`);
+    res.data[0].unshift({ title: 'A Jedi uses the Force for knowledge and defense, never for attack. A list of movies, you must have:' });
     return res.data[0];
   } catch (err) {
     console.error('Error: 0.5 ', err);
-    let message = [{ title: "Master Yoda is away. After the tone, leave a message." }]
+    let message = [{ title: "Judge me by my size, do you? Master Yoda is away. " }]
     return message;
   }
 }
 
 export default {
-  getQuote,
   getCharacters,
   getMovies,
   refreshToken,

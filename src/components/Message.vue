@@ -24,4 +24,9 @@ export default {
 </script>
 
 <style scoped>
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
 </style>
