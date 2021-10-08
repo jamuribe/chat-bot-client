@@ -1,6 +1,7 @@
 <template>
   <div>
     <ChatBox :messages="messages" />
+    <p v-show="typing">Master Yoda is typing...</p>
     <div class="chat-input">
       <input type="text" v-model="message" @keyup.enter="sendMessage" />
       <button @click="sendMessage">Send</button>
@@ -17,6 +18,7 @@ export default {
   data: () => ({
     message: "",
     messages: [],
+    typing: false,
     messageCount: 0,
   }),
   created() {
@@ -47,6 +49,7 @@ export default {
         text: text,
         author: author,
       });
+      if (author === "Master Yoda") this.typing = false;
       this.updateStorage();
     },
 
@@ -54,6 +57,7 @@ export default {
       if (message.match(/\b(force)\b/gi)) return true;
       return false;
     },
+
     checkCount(message) {
       let errorMessages = [
         "I'm sorry, I couldn't find any information relating to your question. Please search for another word or phrase.",
@@ -65,6 +69,7 @@ export default {
         this.messageCount++;
       }
     },
+
     async sendMessage() {
       if (!this.message.length) return;
       this.pushToMessage(this.message, "Me");
@@ -74,6 +79,7 @@ export default {
         this.receiveMessage(this.message);
       }
       this.message = "";
+      this.typing = true;
     },
 
     async receiveMessage(message) {
