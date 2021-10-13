@@ -28,6 +28,7 @@ export default {
     }
     apiService.startConversation();
   },
+
   methods: {
     openStorage() {
       return JSON.parse(sessionStorage.getItem("messages"));
