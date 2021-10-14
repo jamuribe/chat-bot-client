@@ -1,6 +1,6 @@
 # yoda-bot
 
-Yoda-bot is a chat application were the user have a conversation with an Yoda-bot api.
+Yoda-bot is a chat application were the user establishes a conversation with an Yoda-bot api.
 In order to access the working application go to this link https://sheltered-sierra-14629.herokuapp.com/ .
 
 ## Project setup
